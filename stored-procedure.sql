@@ -55,15 +55,52 @@ BEGIN
    (1, "QUIZ1", "plane_db","diagram_path1","creation_script_path"),
    (2, "QUIZ2", "plane_db","diagram_path2","creation_script_path");
    
-   
-   --- create 1 evaluation per class
-   TRUNCATE evaluation
+   -- create at least 5 questions per quiz
+   TRUNCATE quiz_question;
+   INSERT INTO quiz_question(question_id, quiz_id, rank)
+   VALUES
+   (1, 1, 1),
+   (2, 1, 2),
+   (3, 1, 3),
+   (4, 1, 4),
+   (5, 1, 5),
+   (6, 2, 1),
+   (1, 2, 2),
+   (8, 2, 3),
+   (9, 2, 4),
+   (10, 2, 5);
+
+   --- create 1 evaluation per class, complete_at means every test is graded by the trainer
+   TRUNCATE evaluation;
    INSERT INTO evaluation (evaluation_id,scheduled_at,ending_at,nb_minutes,class_id,trainer_id, quiz_id,completed_at)
-   values 
-   (1, "14-06-2017", "14-06-2017", 30, 1, 1, 1, "14-06-2017"),
-   (2, "14-06-2017", "14-06-2017", 30, 2, 2 ,2, "14-06-2017"),
-   (3, "14-06-2017", "14-06-2017", 30, 1, 2 , 1,"14-06-2017");
+   VALUES
+   (1, "14-06-2017  10:00", "14-06-2017 10:50", 30, 1, 1, 1, "15-06-2017   20:45"),
+   (2, "14-06-2017  10:00", "14-06-2017 11:00", 40, 2, 2, 2, "15-06-2017  23:45"),
+   (3, "14-06-2017  10:00", "15-06-2017  11:00", 60, 1, 2, 1, "17-06-2017  10:00");
   
+   -- create 3 tests for evaluation 1
+   INSERT INTO test(student_id,evaluation_id,started_at,completed_at,validated_at)
+   VALUES
+   (3, 1, "14-06-2017  10:02","14-06-2017  10:45","15-06-2017  09:00"),
+   (4, 1, "14-06-2017  10:05","14-06-2017  10:59","15-06-2017  10:00"),
+   (5, 1, "14-06-2017  10:05","14-06-2017  10:59","15-06-2017  10:00");
+   
+   -- create all answers for student , 3 answer for second student, 2 answer for the third student
+   TRUNCATE sql_answer;
+   INSERT INTO sql_answer(question_id, student_id, evaluation_id,query,is_validated,gives_correct_result)
+   VALUES
+   (1, 3, 1, "select * from mytable", 1, 1),
+   (2, 3, 1, "select * from mytable", 1, 1),
+   (3, 3, 1, "select * from mytable", 0, 1),
+   (4, 3, 1, "select * from mytable", 1, 1),
+   (5, 3, 1, "select * from mytable", 0, 0),
+   (1, 4, 1, "select * from mytable", 1, 1),
+   (5, 4, 1, "select * from mytable", 1, 0),
+   (4, 4, 1, "select * from mytable", 0, 1),
+   (1, 5, 1, "select * from mytable", 1, 1),
+   (2, 5, 1, "select * from mytable", 1, 1);
+   
+   
    
 >);
 END $$
