@@ -89,18 +89,31 @@ BEGIN
    TRUNCATE sql_answer;
    INSERT INTO sql_answer(question_id, student_id, evaluation_id,query,is_validated,gives_correct_result)
    VALUES
-   (1, 3, 1, "select * from mytable", 1, 1),
-   (2, 3, 1, "select * from mytable", 1, 1),
-   (3, 3, 1, "select * from mytable", 0, 1),
-   (4, 3, 1, "select * from mytable", 1, 1),
-   (5, 3, 1, "select * from mytable", 0, 0),
-   (1, 4, 1, "select * from mytable", 1, 1),
-   (5, 4, 1, "select * from mytable", 1, 0),
-   (4, 4, 1, "select * from mytable", 0, 1),
-   (1, 5, 1, "select * from mytable", 1, 1),
-   (2, 5, 1, "select * from mytable", 1, 1);
+   (1, 3, 1, "answer1", 1, 1),
+   (2, 3, 1, "answer2", 1, 1),
+   (3, 3, 1, "answer3", 0, 1),
+   (4, 3, 1, "answer4", 1, 1),
+   (5, 3, 1, "answer145", 0, 0),
+   (1, 4, 1, "answer1", 1, 1),
+   (5, 4, 1, "answer178", 1, 0),
+   (4, 4, 1, "answer4", 0, 1),
+   (1, 5, 1, "answer1", 1, 1),
+   (2, 5, 1, "answer2", 1, 1);
    
    
+   -- insert all the answer to all quizzes
+   INSERT INTO sql_question(question_id, question_text,correct_answer)
+   VALUES
+   (1, "question 1 label", "answer1"),
+   (2, "question 2 label", "answer2"),
+   (3, "question 3 label", "answer3"),
+   (4, "question 4 label", "answer4"),
+   (5, "question 5 label", "answer5"),
+   (6, "question 6 label", "answer6"),
+   (7, "question 7 label", "answer7"),
+   (8, "question 8 label", "answer8"),
+   (9, "question 9 label", "answer9"),
+   (10, "question 10 label", "answer10");
    
 >);
 END $$
