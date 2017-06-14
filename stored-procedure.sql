@@ -48,13 +48,21 @@ BEGIN
    (6, 2),
    (7, 2),
    (8, 2);
+   -- create  2 quizzes at least
+   TRUNCATE quiz;
+   INSERT INTO quiz (quiz_id, title, db_name,diagram_path,creation_script_path)
+   VALUES
+   (1, "QUIZ1", "plane_db","diagram_path1","creation_script_path"),
+   (2, "QUIZ2", "plane_db","diagram_path2","creation_script_path");
+   
    
    --- create 1 evaluation per class
    TRUNCATE evaluation
    INSERT INTO evaluation (evaluation_id,scheduled_at,ending_at,nb_minutes,class_id,trainer_id, quiz_id,completed_at)
    values 
-   (1, "14-06-2017", "14-06-2017", 30, 1, ),
-   (1, "14-06-2017", "14-06-2017", 30, 2);
+   (1, "14-06-2017", "14-06-2017", 30, 1, 1, 1, "14-06-2017"),
+   (2, "14-06-2017", "14-06-2017", 30, 2, 2 ,2, "14-06-2017"),
+   (3, "14-06-2017", "14-06-2017", 30, 1, 2 , 1,"14-06-2017");
   
    
 >);
