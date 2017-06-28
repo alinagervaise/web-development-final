@@ -5,12 +5,22 @@
  * Date: 2017/6/28
  * Time: 下午9:44
  */
+/* TODO
+    change status
+    profile button
+*/
 
 include ("controller/dbConfig.php");
 session_start();
 $sid = mysqli_real_escape_string($conn,$_SESSION['uid']);
-$sql = "SELECT * FROM test WHERE student_id = '$sid'";
-$result = mysqli_query($conn,$sql);
+$sql = "SELECT * FROM class_member WHERE user_id = '$sid'";
+$class_result = mysqli_query($conn,$sql);
+$class_row = mysqli_fetch_array($class_result);
+
+$cid = mysqli_real_escape_string($conn, $class_row['class_id']);
+$csql = "SELECT * FROM evaluation WHERE class_id = '$cid'";
+$result = mysqli_query($conn,$csql);
+
 if (!$result) {
     printf("Error: %s\n", mysqli_error($conn));
     exit();
@@ -41,21 +51,28 @@ if (!$result) {
                     <tr>
                         <th>Start Time</th>
                         <th>End Time</th>
-                        <th>Valid Time</th>
+                        <th>duration(minutes)</th>
+                        <th>Validated Time</th>
                         <th>Status</th>
+                        <th>Info</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
                     while ($row = mysqli_fetch_array($result)){
                         echo "<tr>";
-                        echo "<td>" . $row['started_at'] . "</td>";
-                        echo "<td>" . $row['completed_at'] . "</td>";
-                        echo "<td>" . $row['validated_at'] . "</td>";
-                        if ($row['validated_at'] == '')
-                            echo "<td><form action=''><button type='button'>submitted</button></td></form>";
+                        echo "<td>" . $row['scheduled_at'] . "</td>";
+                        echo "<td>" . $row['ending_at'] . "</td>";
+                        echo "<td>" . $row['nb_minutes'] . "</td>";
+                        $eid = mysqli_real_escape_string($conn, $row['evaluation_id']);
+                        $qsql = "SELECT * FROM test WHERE evaluation_id = '$eid'";
+                        $qresult = mysqli_query($conn, $qsql);
+                        if ($qrow = mysqli_fetch_array($qresult))
+                            echo "<td>" . $qrow['validated_at'] . "</td>";
                         else
-                            echo "<td><form action=''><button type='button'>validated</button></td></form>";
+                            echo "<td> - </td>";
+                        echo "<td> - </td>";
+                        echo "<td><form action=''><button type='button'>Info</button></td></form>";
                         echo "</tr>";
                     }
                     ?>

@@ -9,8 +9,7 @@
 
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
-        <li><a href="">Exams</a></li>
-        <li ><a href="">My Evaluations</a></li>
+        <li ><a href="student.php">My Evaluations</a></li>
         <li><a href="">Profile</a></li>
     </ul>
 </div>
