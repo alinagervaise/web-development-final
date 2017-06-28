@@ -15,11 +15,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "SELECT * FROM user WHERE email = '$myusername' and pwd = '$mypassword'";
     $result = mysqli_query($conn,$sql);
+    $row = mysqli_fetch_array($result);
 
     $count = mysqli_num_rows($result);
     //echo $count;
     if($count == 1) {
-        $_SESSION['login_user'] = $_POST['email'];
+        if ($_POST['is_trainer'] == 'yes'){
+            $myuid = mysqli_real_escape_string($conn, $row['user_id']);
+            $tsql = "SELECT * FROM trainer WHERE user_id = '$myuid'";
+            $tresult = mysqli_query($conn,$tsql);
+            $tcount = mysqli_num_rows($tresult);
+            if($tcount == 1)
+                $_SESSION['trainer'] = $_POST['is_trainer'];
+            else{
+                $_SESSION['msg'] = "Your are not trainer, plz login as student";
+                header("location: ../login.php");
+                exit;
+            }
+        }
+        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['uid'] = $row['user_id'];
+        $_SESSION['name'] = $row['name'];
 //        echo "<h1>login success</h1>";
         header("location: ../index.php");
     }else {
