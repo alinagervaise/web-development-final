@@ -38,7 +38,7 @@ if (!$result) {
 <?php include("view/header-student.php"); ?>
 
 <div class="container-fluid">
-    <div style="height: 80px"></div>
+    <div style="height: 60px"></div>
     <div class="row">
         <?php include("view/sider-student.php") ?>
         <div class="col-md-10 main">
@@ -72,7 +72,7 @@ if (!$result) {
                         else
                             echo "<td> - </td>";
                         echo "<td> - </td>";
-                        echo "<td><form action=''><button type='button'>Info</button></td></form>";
+                        echo "<td><form action='evaluation.php?'><input type='hidden' name='id' value='".$row['evaluation_id']."' /> <button type='submit'>Info</button></td></form>";
                         echo "</tr>";
                     }
                     ?>
