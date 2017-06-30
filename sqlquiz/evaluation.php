@@ -20,7 +20,7 @@ $qrow = mysqli_fetch_array($qresult);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Dashboard</title>
+    <title>Evaluation Page</title>
     <?php include("view/bootstrap.php");?>
     <link href="../css/dashboard.css" rel="stylesheet">
 </head>
@@ -39,7 +39,10 @@ $qrow = mysqli_fetch_array($qresult);
                 <h2>End Time: <?php echo $erow['ending_at'];?></h2>
                 <h2>Duration: <?php echo $erow['nb_minutes'];?> min.</h2><br><br>
                 <h2><a href="<?php echo $qrow['creation_script_path'];?>">Download Script</a></h2>
-                <button class="btn btn-lg btn-primary"><h3>Start</h3></button>
+                <form action="quiz.php">
+                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                    <button class="btn btn-lg btn-primary" type="submit"><h3>Start</h3></button>
+                </form>
             </div>
         </div>
     </div>
