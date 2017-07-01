@@ -21,7 +21,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="index.jsp">Dashboard</a></li>
                 <li><a href="#">Profile</a></li>
-                <li><a href="<%=request.getContextPath()%>/logoutServlet">Log out</a></li>
+                <li><a href="controller/logout.php">Log out</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
