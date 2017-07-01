@@ -5,6 +5,14 @@
  * Date: 2017/6/30
  * Time: 上午12:22
  */
+/* TODO
+ * 1. display answer rightly
+ * 2. timeout action
+ * 3. can not access before time
+ * 4. create quiz in database
+ * 5. anti close
+ * */
+
 session_start();
 include('controller/dbConfig.php');
 $eid = mysqli_real_escape_string($conn,$_GET['id']);
