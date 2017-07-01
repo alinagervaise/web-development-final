@@ -33,6 +33,7 @@ if (!$qsresult) {
     <title>Quiz</title>
     <?php include("view/bootstrap.php");?>
     <script>
+        var array = [];
         var seconds = localStorage.getItem('seconds');
         if (seconds == null)
             seconds = 60 * <?php echo $erow['nb_minutes'];?>;
@@ -68,6 +69,16 @@ if (!$qsresult) {
                 if (xhr.readyState == 4 && xhr.status == 200){
                     var display = document.getElementById("question");
                     display.innerHTML = xhr.responseText;
+                    banid = "btn" + id;
+                    var banners = document.getElementsByClassName("banner");
+                    for (var i = 0; i < banners.length; i++){
+                        banners[i].classList.remove("btn-primary");
+                        if (array.includes(banners[i].id))
+                            banners[i].classList.add("btn-success");
+                    }
+                    var banner = document.getElementById(banid);
+                    banner.classList.add("btn-primary");
+                    banner.classList.remove("btn-success");
                 }
             }
         }
@@ -90,6 +101,15 @@ if (!$qsresult) {
                 if (xhr.readyState == 4 && xhr.status == 200){
                     var display = document.getElementById("question");
                     display.innerHTML = xhr.responseText;
+                    banid = "btn" + id;
+                    array.push(banid);
+                    var banner = document.getElementById(banid);
+                    banner.classList.remove("btn-primary");
+                    banner.classList.add("btn-success");
+                    banid = "btn" + (id + 1);
+                    var banner = document.getElementById(banid);
+                    banner.classList.add("btn-primary");
+                    banner.classList.remove("btn-success");
                 }
             }
         }
@@ -106,7 +126,7 @@ if (!$qsresult) {
         <ul class="nav nav-sidebar">
             <?php
                 while ($row = mysqli_fetch_array($qsresult)){
-                    echo "<li><button style='width: 100%;' onclick='getQuestion(". $row['question_id'] .")'><h4>".$row['rank']."</h4></button></li>";
+                    echo "<li><button class='banner' style='width: 100%;' id='btn". $row['question_id'] ."' onclick='getQuestion(". $row['question_id'] .")'><h4>".$row['rank']."</h4></button></li>";
                 }
             ?>
         </ul>
