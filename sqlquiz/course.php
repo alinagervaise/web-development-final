@@ -14,25 +14,22 @@ include ("controller/dbConfig.php");
 session_start();
 
 
-// Get trainer information
-$trainerId = mysqli_real_escape_string($conn, $_SESSION['uid']);
-$sql = "SELECT user_id, email, name, first_name from user WHERE user_id = '$trainerId'";
-$trainer_RS = mysqli_query($conn, $sql);
+//$ evaluation_RS = classModel.getEvaluation($classId, $trainerId) ;
+$trainerId = mysqli_real_escape_string($conn,$_SESSION['uid']);
+$trainer_RS = TrainerModel::get($trainerId);
 
-// Get class information
-//$class_RS = ClassModel::getAll($conn);
-$csql = "SELECT * from class c
-        LEFT OUTER JOIN 
-        (SELECT  e.class_id, e.trainer_id, count(distinct e.evaluation_id) as no_evaluation 
-            FROM class c 
-            LEFT OUTER JOIN  evaluation e
-            on c.class_id = e.class_id
-            WHERE e.trainer_id= '$trainerId'
-            GROUP BY e.class_id , e.trainer_id)as t
-            ON  t.class_id = c.class_id";
-$class_RS = mysqli_query($conn, $csql);
+$class_RS = ClassModel::getAll();
 
-if (!$class_RS) {
+$sid = mysqli_real_escape_string($conn,$_SESSION['uid']);
+$sql = "SELECT * FROM class_member WHERE user_id = '$sid'";
+$class_result = mysqli_query($conn,$sql);
+$class_row = mysqli_fetch_array($class_result);
+
+$cid = mysqli_real_escape_string($conn, $class_row['class_id']);
+$csql = "SELECT * FROM evaluation WHERE class_id = '$cid'";
+$result = mysqli_query($conn,$csql);
+
+if (!$result) {
     printf("Error: %s\n", mysqli_error($conn));
     exit();
 }
@@ -55,13 +52,12 @@ if (!$class_RS) {
         <div class="col-md-10 main">
             <h1 class="page-header">Welcome, <?php echo $_SESSION['name']; ?></h1>
 
-            <h2 class="sub-header">All Courses Available</h2>
+            <h2 class="sub-header">Courses</h2>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>My Evaluations</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -70,16 +66,18 @@ if (!$class_RS) {
                     while ($row = mysqli_fetch_array($class_RS)){
                         echo "<tr>";
                         echo "<td>" . $row['name'] . "</td>";
-                        if (empty($row['no_evaluation'])) {
-                            $var = 0;
-                        }
-                        else{
-                            $var = $row['no_evaluation'];
-                        }
-                        echo "<td>" . $var . "</td>";
-                        echo "<td><form action='class_add_evalation.php?'>"
-                        . "<input type='hidden' name='id' value='".$row['class_id']."' />"
-                                . " <button type='submit'>Add Evaluations</button></td></form>";
+                        /*
+                        $eid = mysqli_real_escape_string($conn, $row['evaluation_id']);
+                        $qsql = "SELECT * FROM test WHERE evaluation_id = '$eid'";
+                        $qresult = mysqli_query($conn, $qsql);
+                        if ($qrow = mysqli_fetch_array($qresult))
+                            echo "<td>" . $qrow['validated_at'] . "</td>";
+                        else
+                            echo "<td> - </td>";
+                        echo "<td> - </td>";
+                        */
+                        
+                        echo "<td><form action='evaluation.php?'><input type='hidden' name='id' value='".$row['evaluation_id']."' /> <button type='submit'>Info</button></td></form>";
                         echo "</tr>";
                     }
                     ?>
