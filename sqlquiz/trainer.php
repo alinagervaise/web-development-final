@@ -9,7 +9,9 @@
     change status
     profile button
 */
-
+ $web_root = "http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/";
+ $logout=''.$web_root.'controller/logout.php';
+ 
 include ("controller/dbConfig.php");
 session_start();
 
@@ -77,7 +79,7 @@ if (!$class_RS) {
                             $var = $row['no_evaluation'];
                         }
                         echo "<td>" . $var . "</td>";
-                        echo "<td><form action='class_add_evalation.php?'>"
+                        echo "<td><form action='class_add_evaluation.php?'>"
                         . "<input type='hidden' name='id' value='".$row['class_id']."' />"
                                 . " <button type='submit'>Add Evaluations</button></td></form>";
                         echo "</tr>";

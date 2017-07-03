@@ -10,7 +10,7 @@
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
         <li><a href="course.php">Courses</a></li>
-        <li ><a href="student.php">My Evaluations</a></li>
+        <li ><a href="trainer_quiz.php">My Quizzes</a></li>
        
     </ul>
 </div>

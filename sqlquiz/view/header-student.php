@@ -5,6 +5,8 @@
  * Date: 2017/6/28
  * Time: 下午4:34
  */
+ $web_root = "http://".$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/";
+ $logout=''.$web_root.'controller/logout.php';
 ?>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -21,7 +23,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="index.jsp">Dashboard</a></li>
                 <li><a href="#">Profile</a></li>
-                <li><a href="controller/logout.php">Log out</a></li>
+                
+                <li><a href=" <?php echo ''. $logout?>">Log out</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
