@@ -1,0 +1,35 @@
+u«Zµìmþ™ZŠvÚ±î¸sql - quiz  feedbacks
+
+
++ user-test relationship: 
+
++entering an evaluation:
+PUT test-on-{evaluationId}-by-{studentId}
+
++ 
++display an evaluation id (load the script) summary
++start the test (show questions) and display  question banner (list of question)
+
++ answer a question of the test (ajax)
++ termate the test
+
++ write the store procedure to refresh the database
+
+
+----------------------------------------------------------
+write test case
+
+
+1. test for the class where the user is register and one where he is not registered
+2. store procedure should content the time and the date when you want to perform the test.
+evalaution , test table write stored procedure to populate 
+write 3 triggers and 4 triggers
+
+
+$(".someClass") <=> document.getElementsByTagName(".someClass")
+
+
+
+//event
+eleent.click(somefunction);
+function(){...}

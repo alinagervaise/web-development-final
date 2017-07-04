@@ -1,0 +1,92 @@
+u«Zµìmþ™ZŠvÚ±î¸
+/**
+ *  Below  is the list of trigger specification for the project
+ *  SQL evaluation
+ */
+ 
+ Trigger 1: I cannot access the evaluation before the date and time it has been scheduled for my class.
+				(class is for example Â« Msc fall 2016 Â»)
+	name: check_evaluation_access
+	description: 
+		. Prevent insert into table quiz before if evaluation.date_begin  is greater than quiz.date_begin (quiz date and time creation)
+	formatting:
+	Error code: 3001
+	
+Trigger 2:
+	name: check_course_duration
+	description:
+		. Prenvent insert on table course before session creation
+		. Prevent the begining of a class to be less than the begining of its session
+		. Prevent the end of a class to be greater than the end of its session
+	formatting:
+	Error code: 3002
+	
+Trigger 3: I cannot see any question before I have started the evaluation.
+	name: enable_view_question
+	description:
+		.Prevent select on table question before quiz.datetime is not null
+	formatting:
+	Error code: 3003
+	
+Trigger 4: maximal ending time, which is greater than the scheduled time plus the maximal duration.
+           The difference takes in account the time to create and populate the database.
+	name: check_terminate_quiz
+	description:
+		. Prevent insert into table answer after quiz.date_begin + quiz.duration is greater than evaluation maximum_duration
+		. Set quiz.is_terminate to true  after uiz.date_begin + quiz.duration is greater than equal to evaluation maximum_duration
+	formatting:
+	Error code: 3004
+	
+Trigger 5: Evaluation of the quiz
+	name: evaluate_quiz
+	description: 
+		. Compute the sum of correct answer  for a quiz  after the quiz is terminated
+	formatting:
+	Error code: 
+	
+Trigger 6: Cannot start a quiz if the evaluation is not completed by the trainer
+	name: check_quiz_start
+	description: 
+		. Prevent to insert into table quiz if evaluation is not validated
+	formatting:
+	Error code: 3006
+	
+	
+Trigger 7:If the class evaluation is not completed, I can validate or invalidate any question in the student evaluation
+         (we call that Â« complete the question Â»)
+	name: check_question_editing
+	description: 
+		.Prevent insert on question after evalution is terminated (is_validated=true)
+	formatting:
+	Error code: 3007
+	
+Trigger 8:If the class evaluation is not completed, I can validate or invalidate any question in the student evaluation
+         (we call that Â« complete the question Â»)
+	name: check_question_editing
+	description: 
+		.Prevent update on question after evalution is terminated (is_validated=true)
+	formatting:
+	Error code: 3008
+
+Trigger 9:If the class evaluation is not completed, I can validate or invalidate any question in the student evaluation
+         (we call that Â« complete the question Â»)
+	name: check_question_editing
+	description: 
+		.Prevent delete on question after evalution is terminated (is_validated=true)
+	formatting:
+	Error code: 3009
+	
+Trigger 10:
+	name: check_evaluation_completion
+	description: 
+		.Prevent updating table evaluation  set evaluation.is_validated to true  before  all questions for this evaluation are validated (is_validated=true)
+	formatting:
+	Error code: 3009
+
+Trigger 11:
+	name: formatting_name
+	description: 
+		. Uppercase course name , remove leading and lagging space
+		. Capitalize member first name, remove leading and trailing spaces, and replace multiple spaces by  one.
+	formatting: name 
+	Error code: 

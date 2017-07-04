@@ -9,6 +9,7 @@
 include ('dbConfig.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
+    
     $eid = $_GET['id'];
     $eeid = mysqli_real_escape_string($conn,$eid);
     $qid = $_GET['qid'];

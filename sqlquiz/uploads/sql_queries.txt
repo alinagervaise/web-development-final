@@ -1,0 +1,67 @@
+u«Zµìmþ™ZŠvÚ±î¸-- question 21
+select nom , no_client from client where nom  like "t%" or  nom  like "h%";
+
+-- question 22
+select nom, email, no_commercial, date_attribution from client
+inner join portefeuille 
+where client.no_client = portefeuille.no_client;
+
+
+
+-- 
+select * from client cl inner join compte c on cl.no_client=c.no_client
+where nom ='dupont';
+
+-- we want the account such that no_client is the no_client of dupont
+-- = for 1 value in for multiple column
+select *
+from compte 
+where no_client =
+( select no_client from client  where nom='dupont');
+
+-- 36 select client having same commercial and assignment date as dupont
+select * from portefeuille where (no_commercial, date_attribute) in 
+(select no_commercial, date_attribution from portefeuille where no_client in 
+  (select no_client from client where nom='Dupont'));
+  
+-- question 27 
+ select * from compte where no_client in (select no_client from client where nom ='Dupont');
+ 
+ 
+-- question 28
+select p.date_attribution , cc.nom as commercial_nom, c.nom 
+from client c  
+	inner join portefeuille p on p.no_client = c.no_client
+	inner join commercial cc on p.no_commercial=cc.no_commercial
+    where c.commentaire is null;
+    
+-- question 29
+select no_client, nom , email from client where no_client in 
+	(select no_client  from portefeuille where no_commercial =1);
+    
+-- question 30
+
+
+
+
+-- outer join
+-- salespersons and their clienr number ven if there is none
+select * 
+from commercial c
+	left outer join 
+    portefeuille p on c.no_commercial =p.no_commercial;
+    
+-- number of clients having more than 1 account
+select * from
+(
+select no_client , count(no_compte) as nb_accounts 
+from compte
+group by no_client) t
+where nb_accounts > 1;
+
+
+select no_client , count(no_compte) as nb_accounts 
+from compte
+group by no_client
+having nb_accounts > 1;
+	

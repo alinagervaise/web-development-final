@@ -5,7 +5,11 @@
  * Date: 2017/6/29
  * Time: 上午1:50
  */
+session_start();
 include('controller/dbConfig.php');
+
+
+ 
 $qid = mysqli_real_escape_string($conn,$_GET['id']);
 $qsql = "SELECT * FROM quiz WHERE quiz_id = '$qid'";
 $qresult = mysqli_query($conn, $qsql);
@@ -37,7 +41,7 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
             <h1 class="page-header">Edit  <?php echo $qrow['title']; ?></h1>
             
             <div class="col-md-5">
-                <form >
+                <form enctype="multipart/form-data" method="PUT">
                     <div class="form-group">
                         <label>Title: </label>
                         <input  class="form-control" type="text" name="title" value="<?php echo $qrow['title'];?>" id="title">
@@ -49,9 +53,9 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                      <div class="form-group">
                         <label>Diagram : </label>
                          <div class="input-group col-xs-12">
-                         <input id="fileInput_diagram" type="file" style="display:none;""/>
+                         <input id="fileInput_diagram" type="file" style="display:none;" name="fileInput_diagram"  value="30000"/>
                           <input type="text" class="form-control input-lg" disabled
-                                 placeholder="<?php echo $qrow['diagram_path'];?>" id="diagram_path">
+                                 placeholder="<?php echo $qrow['diagram_path'];?>" id="diagram_path" name="diagram_path">
                           <span class="input-group-btn">
                             <button class="browse btn btn-primary input-lg" type="button" id="bt_diagram">
                                 <i class="glyphicon glyphicon-search"></i> Browse</button>
@@ -62,9 +66,10 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                      <div class="form-group">
                          <label>Script : </label>
                         <div class="input-group col-xs-12">
-                          <input id="fileInput_script" type="file" style="display:none;" />
+                          <input id="fileInput_script" type="file" style="display:none;"  name="fileInput_script" value="30000"/>
                           <input type="text" class="form-control input-lg" disabled
-                                 placeholder="<?php echo $qrow['creation_script_path'];?>" id="creation_script_path">
+                                 placeholder="<?php echo $qrow['creation_script_path'];?>" id="creation_script_path"
+                                 name="creation_script_path">
                           <span class="input-group-btn">
                             <button class="browse btn btn-primary input-lg" type="button" id="bt_script">
                                 <i class="glyphicon glyphicon-search"></i> Browse</button>
@@ -72,7 +77,7 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                         </div>
                       </div>
              
-                    <input type="hidden" name="input_id" value="<?php echo $qid  ?>">
+                    <input type="hidden" id="id" name="id" value="<?php echo $qid  ?>">
                     <button class="btn btn-lg btn-primary" type="submit"  id="bt_save"><h3>Save</h3></button>
                 </form>
             </div>
@@ -83,37 +88,79 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
 
  <script>
      $(document).ready(function(){
+         
+         
           $('#bt_diagram').click(function(){
               $('#fileInput_diagram').click();
           });
           $('#bt_script').click(function(){
               $('#fileInput_script').click();
           });
+          var diagram_data;
+          var fReader = new FileReader();
+          var file = new File([""],"./uploads/"+ $('#diagram_path').val());
+                fReader.readAsDataURL(file);
+               
+                fReader.onloadend = function(event){
+                 diagram_data = event.target.result;
+                };
           $('#fileInput_diagram').change(function(){
               $('#diagram_path').val((this).files[0].name);
+              var fReader = new FileReader();
+                fReader.readAsDataURL((this).files[0]);
+               
+                fReader.onloadend = function(event){
+                 diagram_data = event.target.result;
+                };
           });
+          var script_data;
+          var fReader = new FileReader();
+           var file2 = new File([""],"./uploads/"+ $('#creation_script_path').val());
+                fReader.readAsDataURL(file2);
+               
+                fReader.onloadend = function(event){
+                 script_data = event.target.result;
+                };
           $('#fileInput_script').change(function(){
               $('#creation_script_path').val((this).files[0].name);
+              var fReader = new FileReader();
+                fReader.readAsDataURL((this).files[0]);
+               
+                fReader.onloadend = function(event){
+                 script_data = event.target.result;
+                };
           });
-        
-        $("#bt_save").click(function (event) {
+          console.log(script_data);
+        $('form').on('submit', function (e) {
+        //$("#bt_save").click(function (event) {
+            event.preventDefault();
+          
           // We need to encode the authentication
-          var auth = "Basic " + Base64.encode("admin:admin");
-          var title = $('#title').val;
-          var db_name = $('#db_name').val;
-          var diagram_path = $('#diagram_path').val;
-          var creation_script_path = $('#creation_script_path').val;
-          var id = $('#input_id').val;
+        // var auth = "Basic " + Base64.encode("admin:admin");
+          var title = $('#title').val();
+          var db_name = $('#db_name').val();
+          var diagram_path = $('#diagram_path').val();
+          var creation_script_path = $('#creation_script_path').val();
+          var id = $('#id').val();
+        
+            var file_data = $('#fileInput_diagram').prop("files")[0];   
+             var form_data = new FormData();                  
+            form_data.append("file", file_data);
+        
+          console.log(script_data);
           $.ajax({
             type: "PUT",
             url: "controller/trainer_save_quiz.php",
+         
             // Body parameters to send
             data: {
               id:id,
               title:title,
               db_name: db_name,
               creation_script_path:creation_script_path,
-              diagram_path:diagram_path
+              diagram_path:diagram_path,
+              diagram_data:diagram_data,
+              script_data:script_data
             },
             // We add the auth header before sending the request
             /*beforeSend: function (xhr) {
@@ -121,11 +168,12 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
             },*/
             // What to do in case of failure (400-599)
             error: function (xhr, string) {
-              console.log("QUIZ UPDATED"+ xhr.responseText);
+              console.log("QUIZ ERROR"+ xhr.responseText);
             },
             // What to do if success (200-299)
             success: function (xml) {
-              console.log("QUIZ UPDATED");
+              console.log("QUIZ SUCCESS");
+               window.location='trainer_quiz.php';
             }
           });
         });

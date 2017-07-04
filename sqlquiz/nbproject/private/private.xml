@@ -4,15 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/trainer_edit_quiz.php</file>
-            <file>file:/C:/wamp64/www/web-development-final/sqlquiz/view/sider-trainer.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/controller/logout.php</file>
+            <file>file:/C:/wamp64/www/web-development-final/sqlquiz/trainer_quiz.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/controller/logincheck.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/evaluation.php</file>
-            <file>file:/C:/wamp64/www/web-development-final/sqlquiz/course.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/quiz.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/trainer.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/controller/quizGet.php</file>
             <file>file:/C:/wamp64/www/web-development-final/sqlquiz/index.php</file>
+            <file>file:/C:/wamp64/www/web-development-final/sqlquiz/controller/trainer_save_quiz.php</file>
+            <file>file:/C:/wamp64/www/web-development-final/sqlquiz/login.php</file>
         </group>
     </open-files>
 </project-private>

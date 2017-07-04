@@ -1,0 +1,58 @@
+u«Zµìmþ™ZŠvÚ±î¸-- question 1
+select * from pilot where bonus is not null;
+
+-- question 2
+select  * from pilot where name like "%u%";
+
+-- question 3
+select  * from pilot where name like "%u%";
+
+-- question 4  : Total number of pilots, and number of pilots with a bonus (in a single query)
+select count(*) , count(bonus) as b from pilot 
+having b =(select count(bonus) from pilot where bonus is not null) ;
+
+-- question 5 Number of flights by departure day (dd-mm-yyy) and hour (hh:mn) (GROUP BY)
+
+select count(flight_id) from flight group by leaving_at ;
+
+-- question 6 Pilot name, plane model, departure date, departure and arrival airport id,
+-- sorted by pilot name and plane model (both in alphabetical order)
+ select  p.name, pl.type, f.leaving_at, f.arriving_at, a.airport_id from pilot p
+	left outer join flight f on p.pilot_id = f.pilot_id
+    left outer join  plane pl on f.plane_id = pl.plane_id
+    left outer  join airport a on  f.arriving_at = a.airport_id
+    order by p.name;
+    
+-- question 7 Departure and arrival city name, and departure date
+-- sorted by departure city name and arrival city name (both in alphabetical order)
+
+select c.name as departure_city, c.name as arrival_city , f.leaving_at from  flight f
+ inner join  airport a on f.from_airport_id = a.airport_id  
+ inner join city c on a.city_id = c.city_id
+ having departure_city in (select departure_city where a.airport_id = f.from_airport_id ) ;
+ 
+ -- question 8 Pilots having the greatest salary (nested 1 value)
+ select * from pilot where salary = 
+ (select max(salary)from pilot);
+ 
+ -- question 9 Flights occuring at 12/04/2015 (nested query)
+ 
+ select * from flight where date_format(leaving_at,  '%d/%m/%y') >= "12/04/2015";
+ 
+ -- question 10 Pilots 
+ -- having flown the same plane from the same airport as Mathieu Lenormand,
+ -- including himself (nested queries)
+ select * from pilot where pilot_id in (
+select pilot_id from flight where plane_id in
+ ( 
+ select  plane_id from flight where pilot_id in
+ (select  pilot_id from pilot p where p.first_name like 'Mathieu'))) limit  10;
+ 
+-- could not finish
+ 
+ -- question 11 Name and salary of pilots flying a A380 (nested query)
+select name, salary from pilot where pilot_id in (
+ select pilot_id from flight where plane_id in 
+ (select plane_id from plane where type = 'A380'))
+ 
+ 

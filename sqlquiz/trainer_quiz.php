@@ -43,6 +43,7 @@ if (!$quiz_RS) {
             <h1 class="page-header">Welcome, <?php echo $_SESSION['name']; ?></h1>
 
             <h2 class="sub-header">Available Quizzes</h2>
+            <h4 class="bg-danger"><?php if (isset($_SESSION['msg'])) {echo $_SESSION['msg']; $_SESSION['msg'] = '';} ?></h4>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
