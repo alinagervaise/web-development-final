@@ -59,20 +59,43 @@ if (!$result) {
                     </thead>
                     <tbody>
                     <?php
-                    while ($row = mysqli_fetch_array($result)){
+                    while ($row = mysqli_fetch_array($result)) {
+                        $sttus = "-";
                         echo "<tr>";
                         echo "<td>" . $row['scheduled_at'] . "</td>";
                         echo "<td>" . $row['ending_at'] . "</td>";
                         echo "<td>" . $row['nb_minutes'] . "</td>";
                         $eid = mysqli_real_escape_string($conn, $row['evaluation_id']);
-                        $qsql = "SELECT * FROM test WHERE evaluation_id = '$eid'";
+                        $uid = mysqli_real_escape_string($conn, $_SESSION['uid']);
+                        $qsql = "SELECT * FROM test WHERE evaluation_id = '$eid' and student_id = '$uid'";
                         $qresult = mysqli_query($conn, $qsql);
-                        if ($qrow = mysqli_fetch_array($qresult))
-                            echo "<td>" . $qrow['validated_at'] . "</td>";
-                        else
+                        if ($qrow = mysqli_fetch_array($qresult)) {
+                            if ($qrow['validated_at'] == ""){
+                                echo "<td> - </td>";
+                                $status = "Submitted";
+                                if ($qrow['completed_at'] == "")
+                                    $status = "In doing";
+                            } else {
+                                echo "<td>" . $qrow['validated_at'] . "</td>";
+                                $status = "Validated";
+                            }
+                        } else {
                             echo "<td> - </td>";
-                        echo "<td> - </td>";
-                        echo "<td><form action='evaluation.php?'><input type='hidden' name='id' value='".$row['evaluation_id']."' /> <button type='submit'>Info</button></td></form>";
+                            $timezone = date_default_timezone_get();
+                            date_default_timezone_set($timezone);
+                            $date = date('Y-m-d h:i:s', time());
+                            if (strtotime($row['scheduled_at']) > strtotime('now'))
+                                $status = "In coming";
+                            else if (strtotime($row['ending_at']) < strtotime('now'))
+                                $status = "Didn't attend";
+                            else
+                                $status = "Start now!";
+                        }
+                        echo "<td> $status </td>";
+                        if ($status != 'In coming')
+                            echo "<td><form action='evaluation.php?'><input type='hidden' name='id' value='".$row['evaluation_id']."' /> <button type='submit'>Info</button></td></form>";
+                        else
+                            echo "<td><button>Info</button></td>";
                         echo "</tr>";
                     }
                     ?>

@@ -5,14 +5,27 @@
  * Date: 2017/6/30
  * Time: 上午12:22
  */
-/* TODO
- * 3. can not access before time
- * 4. create quiz in database
- * */
 
 session_start();
 include('controller/dbConfig.php');
+
+$timezone = date_default_timezone_get();
+date_default_timezone_set($timezone);
+$date = date('Y-m-d h:i:s', time());
 $eid = mysqli_real_escape_string($conn,$_GET['id']);
+$uid = mysqli_real_escape_string($conn,$_SESSION['uid']);
+$time = mysqli_real_escape_string($conn,$date);
+$sql = "INSERT INTO test (student_id, evaluation_id, started_at)VALUES($uid, $eid, '$date')";
+if (! mysqli_query($conn, $sql)) {
+    $sql = "SELECT * FROM test where student_id = $uid and evaluation_id = $eid";
+    $rs = mysqli_query($conn, $sql);
+    $rw = mysqli_fetch_array($rs);
+    if ($rw['completed_at'] != ''){
+        echo "<script>alert('You have already submitted your work');</script>";
+        echo "<script>window.location.href = 'evaluation.php?id=".$_GET['id']."'</script>";
+    }
+}
+
 $esql = "SELECT * FROM evaluation WHERE evaluation_id = '$eid'";
 $eresult = mysqli_query($conn,$esql);
 $erow = mysqli_fetch_array($eresult);
@@ -139,6 +152,10 @@ if (!$qsresult) {
                 submit();
                 return 'Are you sure you want to quite?';
             };
+            window.onbeforeunload = function() {
+                submit();
+                return "Dude, are you sure you want to leave? Think of the kittens!";
+            }
         }
     </script>
 
