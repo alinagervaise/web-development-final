@@ -20,8 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET"){
     $sql = "SELECT * FROM sql_question WHERE question_id = '$qqid'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
+
+    $sql = "SELECT * from sql_answer WHERE question_id = '$qid' and student_id = '$uid' and evaluation_id = '$eid'";
+    $result = mysqli_query($conn, $sql);
+    $arow = mysqli_fetch_array($result);
+    //echo $sql;
+
     echo "<h3>Q: ".$row['question_text']."</h3>";
-    $answer = "answer here";
+    $answer = $arow['query'];
     echo "<textarea class='form-control' id='answer' rows='5'>".$answer."</textarea>";
     echo "<button onclick='sendAnswer(".$qid.")' style='float: right'><h3>Validate and Next</h3></button>";
 }

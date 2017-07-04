@@ -6,11 +6,8 @@
  * Time: 上午12:22
  */
 /* TODO
- * 1. display answer rightly
- * 2. timeout action
  * 3. can not access before time
  * 4. create quiz in database
- * 5. anti close
  * */
 
 session_start();
@@ -41,8 +38,21 @@ if (!$qsresult) {
     <title>Quiz</title>
     <?php include("view/bootstrap.php");?>
     <script>
+
         var array = [];
         var seconds = localStorage.getItem('seconds');
+        function submit() {
+            if(seconds > 0){
+                if (confirm('Are you sure you want to submit?')){
+                    window.location.href = 'controller/quizSave.php?eid=<?php echo $_GET['id']; ?>&uid=<?php echo $_SESSION['uid']; ?>';
+                    localStorage.clear();
+                }
+            } else {
+                window.location.href = 'controller/quizSave.php?eid=<?php echo $_GET['id']; ?>&uid=<?php echo $_SESSION['uid']; ?>';
+                localStorage.clear();
+            }
+        }
+
         if (seconds == null)
             seconds = 60 * <?php echo $erow['nb_minutes'];?>;
         function secondPassed() {
@@ -56,6 +66,8 @@ if (!$qsresult) {
                 clearInterval(countdownTimer);
                 document.getElementById('timmer').innerHTML = "Buzz Buzz";
                 localStorage.clear();
+                alert("timeup, auto submit!");
+                submit();
             } else {
                 seconds--;
                 localStorage.setItem("seconds", seconds);
@@ -122,6 +134,12 @@ if (!$qsresult) {
             }
         }
 
+        if (seconds > 0){
+            window.onbeforeunload = function(e) {
+                submit();
+                return 'Are you sure you want to quite?';
+            };
+        }
     </script>
 
 </head>
@@ -136,7 +154,8 @@ if (!$qsresult) {
                 while ($row = mysqli_fetch_array($qsresult)){
                     echo "<li><button class='banner' style='width: 100%;' id='btn". $row['question_id'] ."' onclick='getQuestion(". $row['question_id'] .")'><h4>".$row['rank']."</h4></button></li>";
                 }
-            ?>
+            ?><br>
+            <li><button class='banner' style='width: 100%;' id='btn' onclick='submit()'><h4>Submit</h4></button></li>
         </ul>
     </div>
     <div class="col-md-10 main">
