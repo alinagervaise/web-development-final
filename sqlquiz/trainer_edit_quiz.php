@@ -76,14 +76,18 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                           </span>
                         </div>
                       </div>
-             
-                    <input type="hidden" id="id" name="id" value="<?php echo $qid  ?>">
+                     <input type="hidden" id="id" name="id" value="<?php echo $qid  ?>">
+                    <button class="btn btn-lg btn-success" type="submit"  id="bt_add_question"><h3>Edit Questions</h3></button>
+                    
+                 
                     <button class="btn btn-lg btn-primary" type="submit"  id="bt_save"><h3>Save</h3></button>
+                   
                 </form>
             </div>
             
             <div class="col-md-7">
-                 <?php include("view/question_list.php") ?>
+                
+                
             </div>
         </div>
     </div>
@@ -92,8 +96,26 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
 
  <script>
      $(document).ready(function(){
-         
-         
+          var id = $('#id').val();
+          $('#bt_add_question').click(function(){
+               console.log("script_data");
+          
+            $.ajax({
+            // HTTP method
+            type: "GET",
+            //url: "view/question_list.php?id="+id,
+           
+            // What to do in case of error (status 400-599)
+            // xhr stands for the underlying XMLHttpRequest object
+            error: function (xhr, string) {
+              //$("#zone").html("Error: " + xhr.status);
+            },
+            // What to do if success (status 200-299)
+            success: function (data) {
+              window.location="question_list.php?id="+id;
+            }
+          });
+        });
           $('#bt_diagram').click(function(){
               $('#fileInput_diagram').click();
           });
@@ -123,8 +145,8 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                 };
           });
           console.log(script_data);
-        $('form').on('submit', function (e) {
-        //$("#bt_save").click(function (event) {
+        //$('form').on('submit', function (e) {
+        $("#bt_save").click(function (event) {
             event.preventDefault();
           
           // We need to encode the authentication
@@ -139,7 +161,7 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
              var form_data = new FormData();                  
             form_data.append("file", file_data);
         
-          console.log(script_data);
+         
           $.ajax({
             type: "PUT",
             url: "controller/trainer_save_quiz.php",

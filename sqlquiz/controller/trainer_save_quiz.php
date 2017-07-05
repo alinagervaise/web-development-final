@@ -8,6 +8,19 @@
  */
 include ('dbConfig.php');
 session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    //parse_str(file_get_contents("php://input"), $_GET);
+    $qid = $_GET['id'];
+    $id = mysqli_real_escape_string($conn, $qid);
+   
+    $sql = " SELECT  * from sql_question sq
+            INNER JOIN quiz_question qq
+            ON sq.question_id = qq.question_id WHERE quiz_id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    
+   
+}
   
 if ($_SERVER["REQUEST_METHOD"] == "PUT") {
     parse_str(file_get_contents("php://input"), $_PUT);
