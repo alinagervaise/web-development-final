@@ -25,18 +25,27 @@ if ($_SERVER["REQUEST_METHOD"] == "PUT") {
     $diagram_path = mysqli_real_escape_string($conn, $dpid);
 
     $sql = "UPDATE quiz SET"
-            . " title= '$title', db_name='$db_name', creation_script_path='$creation_script_path', "
-            . "  diagram_path='$diagram_path' WHERE quiz_id = '$id'";
-    
-    $result = mysqli_query($conn, $sql);
+            . " title= '$title', db_name='$db_name'";
+           
+   
     $sdid = $_PUT['script_data'];
-    $script_data = mysqli_real_escape_string($conn, $sdid);
-    save_file( $creation_script_path, $script_data);
-    
-     $ddid = $_PUT['diagram_data'];
-    $diagram_data = mysqli_real_escape_string($conn, $ddid);
-    save_file( $diagram_path, $diagram_data);
-    $_SESSION['msg'] = "Quiz update success";
+    $_SESSION['msg']="";
+    if ($sdid != null){
+        $sql = $sql . ", creation_script_path='$creation_script_path', ";
+        $script_data = mysqli_real_escape_string($conn, $sdid);
+        save_file( $creation_script_path, $script_data);
+        $_SESSION['msg'] = $_SESSION['msg']."No Diagram set for this quiz\n";
+    }
+    $ddid = $_PUT['diagram_data'];
+    if ($ddid != null){
+        $sql = $sql. "  diagram_path='$diagram_path' ";
+        $diagram_data = mysqli_real_escape_string($conn, $ddid);
+        save_file( $diagram_path, $diagram_data);
+        $_SESSION['msg'] = $_SESSION['msg']."No Script set  for this quiz\n";
+    }
+    $sql = $sql." WHERE quiz_id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    $_SESSION['msg'] = $_SESSION['msg']."Quiz update success";
    
 }
 

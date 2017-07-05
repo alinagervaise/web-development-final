@@ -81,6 +81,10 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                     <button class="btn btn-lg btn-primary" type="submit"  id="bt_save"><h3>Save</h3></button>
                 </form>
             </div>
+            
+            <div class="col-md-7">
+                 <?php include("view/question_list.php") ?>
+            </div>
         </div>
     </div>
 </div>
@@ -96,14 +100,8 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
           $('#bt_script').click(function(){
               $('#fileInput_script').click();
           });
-          var diagram_data;
-          var fReader = new FileReader();
-          var file = new File([""],"./uploads/"+ $('#diagram_path').val());
-                fReader.readAsDataURL(file);
-               
-                fReader.onloadend = function(event){
-                 diagram_data = event.target.result;
-                };
+          var diagram_data= null;
+        
           $('#fileInput_diagram').change(function(){
               $('#diagram_path').val((this).files[0].name);
               var fReader = new FileReader();
@@ -113,14 +111,8 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
                  diagram_data = event.target.result;
                 };
           });
-          var script_data;
-          var fReader = new FileReader();
-           var file2 = new File([""],"./uploads/"+ $('#creation_script_path').val());
-                fReader.readAsDataURL(file2);
-               
-                fReader.onloadend = function(event){
-                 script_data = event.target.result;
-                };
+          var script_data = null;
+          
           $('#fileInput_script').change(function(){
               $('#creation_script_path').val((this).files[0].name);
               var fReader = new FileReader();
@@ -173,7 +165,7 @@ $qqrow = mysqli_fetch_array($quiz_question_RS);
             // What to do if success (200-299)
             success: function (xml) {
               console.log("QUIZ SUCCESS");
-               window.location='trainer_quiz.php';
+              window.location='trainer_quiz.php';
             }
           });
         });
