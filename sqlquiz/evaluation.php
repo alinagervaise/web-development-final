@@ -29,7 +29,7 @@ $qrow = mysqli_fetch_array($qresult);
 <div class="container-fluid">
     <div style="height: 60px"></div>
     <div class="row">
-        <?php include("view/sider-student.php") ?>r
+        <?php include("view/sider-student.php") ?>
         <div class="col-md-10 main">
             <h1 class="page-header">Welcome to <?php echo $qrow['title']; ?></h1>
             <img src="<?php echo $qrow['diagram_path'] ?>" class="col-md-7">
